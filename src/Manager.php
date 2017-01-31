@@ -173,9 +173,9 @@ class Manager
     private function backup()
     {
         if (! $this->disk->exists(storage_path('langmanGUI'))) {
-            $this->disk->makeDirectory('langmanGUI');
+            $this->disk->makeDirectory(storage_path('langmanGUI'));
 
-            $this->disk->put('langmanGUI'.'/.gitignore', "*\n!.gitignore");
+            $this->disk->put(storage_path('langmanGUI'.'/.gitignore'), "*\n!.gitignore");
         }
 
         $this->disk->copyDirectory(resource_path('lang'), storage_path('langmanGUI/'.time()));
