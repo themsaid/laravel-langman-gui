@@ -1,0 +1,27 @@
+{
+    "name": "themsaid/laravel-langman-gui",
+    "description": "Manage language files with ease.",
+    "keywords": [
+        "laravel",
+        "localization",
+        "multilingual"
+    ],
+    "homepage": "https://github.com/themsaid/laravel-langman-gui",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mohamed Said",
+            "email": "theMohamedSaid@gmail.com",
+            "homepage": "https://themsaid.com"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "illuminate/translation": "~5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Themsaid\\LangmanGUI\\": "src"
+        }
+    }
+}
