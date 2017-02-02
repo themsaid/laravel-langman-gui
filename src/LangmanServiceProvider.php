@@ -46,13 +46,9 @@ class LangmanServiceProvider extends ServiceProvider
     {
         $this->app['router']->group(config('langmanGUI.routeGroupConfig'), function ($router) {
             $router->get('/langman', function () {
-                $languages = collect(array_keys(app(Manager::class)->getTranslations()))->filter(function ($lang) {
-                    return $lang != config('langmanGUI.base_language');
-                });
-
                 return view('langmanGUI::admin', [
                     'translations' => app(Manager::class)->getTranslations(),
-                    'languages' => $languages
+                    'languages' => array_keys(app(Manager::class)->getTranslations())
                 ]);
             });
 
