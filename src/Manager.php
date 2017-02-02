@@ -111,7 +111,7 @@ class Manager
 
         $fileContent[$key] = $value;
 
-        file_put_contents($filename, json_encode($fileContent));
+        file_put_contents($filename, json_encode($fileContent, JSON_UNESCAPED_UNICODE));
     }
 
     /**
