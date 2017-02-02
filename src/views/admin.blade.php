@@ -215,23 +215,9 @@
 
                 if (key != null) {
                     _.forEach(this.languages, function (lang) {
-                        that.translations[lang][key] = null;
+                        that.$set(that.translations[lang], key, '');
                     });
                 }
-            },
-
-
-            /**
-             * Save the translation lines.
-             */
-            save: function () {
-                $.ajax('/langman/save', {
-                    data: JSON.stringify({translations: this.translations}),
-                    headers: {"X-CSRF-TOKEN": "{{csrf_token()}}"},
-                    type: 'POST', contentType: 'application/json'
-                }).done(function () {
-                    alert('Saved Successfully.');
-                })
             },
 
 
@@ -248,6 +234,20 @@
 
                     this.selectedKey = null;
                 }
+            },
+
+
+            /**
+             * Save the translation lines.
+             */
+            save: function () {
+                $.ajax('/langman/save', {
+                    data: JSON.stringify({translations: this.translations}),
+                    headers: {"X-CSRF-TOKEN": "{{csrf_token()}}"},
+                    type: 'POST', contentType: 'application/json'
+                }).done(function () {
+                    alert('Saved Successfully.');
+                })
             },
 
 
