@@ -105,7 +105,7 @@ class Manager
      */
     public function setLanguageKey($lang, $key, $value = null)
     {
-        $filename = $this->languageFilesPath.DIRECTORY_SEPARATOR.'json'.DIRECTORY_SEPARATOR."$lang.json";
+        $filename = $this->languageFilesPath.DIRECTORY_SEPARATOR."$lang.json";
 
         $fileContent = (array) json_decode(file_get_contents($filename));
 
