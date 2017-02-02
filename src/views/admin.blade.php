@@ -66,7 +66,7 @@
                     @{{ _.toArray(currentLanguageTranslations).length }} Keys
                 </p>
 
-                <p class="navbar-text">
+                <p class="navbar-text" v-if="_.toArray(currentLanguageUntranslatedKeys).length ">
                     <span class="text-danger">
                         @{{ _.toArray(currentLanguageUntranslatedKeys).length }} Un-translated
                     </span>
@@ -102,20 +102,35 @@
                 </div>
 
                 <ul class="list-group" style="margin-top:20px; overflow: scroll; height: 500px;">
-                    <a href="#" v-for="(value, key) in filteredTranslations"
-                       v-on:click="selectedKey = key"
-                       :class="['list-group-item', {'list-group-item-danger': !value}]">
-                        <h5 class="list-group-item-heading">@{{ key }}</h5>
-                        <p class="list-group-item-text">@{{ value }}</p>
+                    <a href="#" v-for="line in filteredTranslations"
+                       v-on:click="selectedKey = line.key"
+                       :class="['list-group-item', {'list-group-item-danger': !line.value}]">
+                        <h5 class="list-group-item-heading">@{{ line.key }}</h5>
+                        <p class="list-group-item-text">@{{ line.value }}</p>
                     </a>
                 </ul>
             </div>
             <div class="col-sm-6">
-                <div class="well">
-                    @{{ selectedKey }}
+
+                <div v-if="selectedKey">
+                    <div class="well">
+                        @{{ selectedKey }}
+                    </div>
+
+                    <textarea rows="10" class="form-control" v-model="translations[selectedLanguage][selectedKey]"></textarea>
+
+                    <hr>
+
+                    <a class="text-danger" href="#" v-on:click="removeKey(selectedKey)">Remove this key</a>
                 </div>
 
-                <textarea rows="10" class="form-control" v-model="currentLanguageTranslations[selectedKey]"></textarea>
+                <h4 class="text-muted text-center" v-else>
+                    .<br>
+                    .<br>
+                    .<br><br>
+                    Select a key from the list to the left
+                </h4>
+
             </div>
         </div>
     </div>
@@ -139,7 +154,13 @@
          * The Vue component is ready.
          */
         mounted: function () {
-            this.selectedKey = _.keys(this.currentLanguageTranslations)[0];
+            var that = this;
+
+            _.forEach(this.translations[this.baseLanguage], function (value, key) {
+                if (!value) {
+                    that.translations[that.baseLanguage][key] = key;
+                }
+            });
         },
 
 
@@ -151,13 +172,15 @@
                 var that = this;
 
                 if (this.searchPhrase) {
-                    return _.pickBy(this.currentLanguageTranslations, function (value, key) {
-                        return key.toLowerCase()
-                                        .indexOf(that.searchPhrase.toLowerCase()) > -1;
-                    });
+                    return _.chain(this.currentLanguageTranslations)
+                            .pickBy(function (line) {
+                                return line.key.toLowerCase().indexOf(that.searchPhrase.toLowerCase()) > -1;
+                            })
+                            .sortBy('value')
+                            .value();
                 }
 
-                return this.currentLanguageTranslations;
+                return _.sortBy(this.currentLanguageTranslations, 'value');
             },
 
 
@@ -165,7 +188,9 @@
              * List of translation lines from the current language.
              */
             currentLanguageTranslations: function () {
-                return this.translations[this.selectedLanguage];
+                return _.map(this.translations[this.selectedLanguage], function (value, key) {
+                    return {key: key, value: value ? value : ''};
+                });
             },
 
 
@@ -185,7 +210,8 @@
              * Add a new translation key.
              */
             addNewKey: function () {
-                var that = this, key = prompt("Please enter the new key");
+                var that = this,
+                        key = prompt("Please enter the new key");
 
                 if (key != null) {
                     _.forEach(this.languages, function (lang) {
@@ -199,8 +225,6 @@
              * Save the translation lines.
              */
             save: function () {
-                var that = this;
-
                 $.ajax('/langman/save', {
                     data: JSON.stringify({translations: this.translations}),
                     headers: {"X-CSRF-TOKEN": "{{csrf_token()}}"},
@@ -208,6 +232,22 @@
                 }).done(function () {
                     alert('Saved Successfully.');
                 })
+            },
+
+
+            /**
+             * Remove the given key from all languages.
+             */
+            removeKey: function (key) {
+                var that = this;
+
+                if (confirm('Are you sure you want to remove "' + key + '"')) {
+                    _.forEach(this.languages, function (lang) {
+                        that.translations[lang] = _.omit(that.translations[lang], [key]);
+                    });
+
+                    this.selectedKey = null;
+                }
             },
 
 

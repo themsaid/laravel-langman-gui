@@ -55,20 +55,23 @@ class Manager
     /**
      * Get all the available lines.
      *
+     * @param bool $reload
      * @return array
      */
-    public function getTranslations()
+    public function getTranslations($reload = false)
     {
-        if (! $this->translations) {
-            $files = collect($this->disk->allFiles($this->languageFilesPath))->filter(function ($file) {
-                return $this->disk->extension($file) == 'json';
-            });
-
-            foreach ($files as $file) {
-                $this->translations[str_replace('.json', '', $file->getFilename())] =
-                    collect(json_decode($file->getContents()))->sort()->toArray();
-            }
+        if ($this->translations && $reload) {
+            return $this->translations;
         }
+
+        collect($this->disk->allFiles($this->languageFilesPath))
+            ->filter(function ($file) {
+                return $this->disk->extension($file) == 'json';
+            })
+            ->each(function ($file) {
+                $this->translations[str_replace('.json', '', $file->getFilename())]
+                    = json_decode($file->getContents());
+            });
 
         return $this->translations;
     }
@@ -96,25 +99,6 @@ class Manager
     }
 
     /**
-     * Set a language key.
-     *
-     * @param string $lang
-     * @param string $key
-     * @param string $value
-     * @return void
-     */
-    public function setLanguageKey($lang, $key, $value = null)
-    {
-        $filename = $this->languageFilesPath.DIRECTORY_SEPARATOR."$lang.json";
-
-        $fileContent = (array) json_decode(file_get_contents($filename));
-
-        $fileContent[$key] = $value;
-
-        file_put_contents($filename, json_encode($fileContent, JSON_UNESCAPED_UNICODE));
-    }
-
-    /**
      * @param $translations
      */
     public function saveTranslations($translations)
@@ -122,9 +106,9 @@ class Manager
         $this->backup();
 
         foreach ($translations as $lang => $lines) {
-            foreach ($lines as $key => $value) {
-                $this->setLanguageKey($lang, $key, $value);
-            }
+            $filename = $this->languageFilesPath.DIRECTORY_SEPARATOR."$lang.json";
+
+            file_put_contents($filename, json_encode($lines, JSON_UNESCAPED_UNICODE));
         }
     }
 

@@ -30,7 +30,7 @@ class LangmanServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/langmanGUI.php', 'langmanGUI');
 
-        $this->app->bind(Manager::class, function () {
+        $this->app->singleton(Manager::class, function () {
             return new Manager(
                 new Filesystem,
                 $this->app['path.lang'],
@@ -40,7 +40,7 @@ class LangmanServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the admin routes
+     * Register the Langman routes.
      */
     protected function registerRoutes()
     {
@@ -53,19 +53,13 @@ class LangmanServiceProvider extends ServiceProvider
             });
 
             $router->post('/langman/sync', function () {
-                $manager = app(Manager::class);
+                app(Manager::class)->sync();
 
-                $manager->sync();
-
-                return response(['translations' => $manager->getTranslations(true)]);
+                return response(['translations' => app(Manager::class)->getTranslations()]);
             });
 
             $router->post('/langman/save', function () {
-                $manager = app(Manager::class);
-
-                $manager->saveTranslations(request()->translations);
-
-                return response('ok');
+                app(Manager::class)->saveTranslations(request()->translations);
             });
         });
     }
