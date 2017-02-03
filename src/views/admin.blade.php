@@ -85,7 +85,7 @@
                             <li v-for="lang in languages" @click="selectedLanguage = lang"><a href="#">@{{ lang }}</a></li>
                         </ul>
                     </li>
-                    <li><a href="#" v-on:click="sync">Synchronize</a></li>
+                    <li><a href="#" v-on:click="sync">Scan</a></li>
                     <li><a href="#" v-on:click="addNewKey">New Key</a></li>
                     <li><a href="#" v-on:click="save">Save</a></li>
                 </ul>

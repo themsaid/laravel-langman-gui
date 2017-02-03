@@ -108,7 +108,9 @@ class Manager
         foreach ($translations as $lang => $lines) {
             $filename = $this->languageFilesPath.DIRECTORY_SEPARATOR."$lang.json";
 
-            file_put_contents($filename, json_encode($lines, JSON_UNESCAPED_UNICODE));
+            ksort($lines);
+
+            file_put_contents($filename, json_encode($lines, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
     }
 
