@@ -53,9 +53,7 @@ class LangmanServiceProvider extends ServiceProvider
             });
 
             $router->post('/langman/sync', function () {
-                app(Manager::class)->sync();
-
-                return response(['translations' => app(Manager::class)->getTranslations()]);
+                return response(app(Manager::class)->sync());
             });
 
             $router->post('/langman/save', function () {

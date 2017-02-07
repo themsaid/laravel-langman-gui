@@ -79,23 +79,27 @@ class Manager
     /**
      * Synchronize the language keys from files.
      *
-     * @return void
+     * @return object
      */
     public function sync()
     {
         $this->backup();
 
-        $existingKeys = $this->getTranslations();
+        $output = [];
+
+        $translations = $this->getTranslations();
 
         $keysFromFiles = array_collapse($this->getTranslationsFromFiles());
 
         foreach (array_unique($keysFromFiles) as $fileName => $key) {
-            foreach ($existingKeys as $lang => $keys) {
+            foreach ($translations as $lang => $keys) {
                 if (! array_key_exists($key, $keys)) {
-                    $this->setLanguageKey($lang, $key);
+                    $output[] = $key;
                 }
             }
         }
+
+        return array_unique($output);
     }
 
     /**

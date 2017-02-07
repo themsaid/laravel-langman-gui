@@ -56,11 +56,10 @@
     <nav class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
-                <span class="navbar-brand">Laravel Langman GUI</span>
+                <span class="navbar-brand">Laravel Langman</span>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
 
                 <p class="navbar-text">
                     @{{ _.toArray(currentLanguageTranslations).length }} Keys
@@ -73,7 +72,7 @@
                 </p>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
+                    <li class="dropdown" v-if="languages.length">
                         <a href="#" data-toggle="dropdown" role="button"
                            class="dropdown-toggle"
                            aria-haspopup="true"
@@ -85,16 +84,16 @@
                             <li v-for="lang in languages" @click="selectedLanguage = lang"><a href="#">@{{ lang }}</a></li>
                         </ul>
                     </li>
-                    <li><a href="#" v-on:click="sync">Scan</a></li>
-                    <li><a href="#" v-on:click="addNewKey">New Key</a></li>
-                    <li><a href="#" v-on:click="save">Save</a></li>
+                    <li><a href="#" v-on:click="sync" v-if="languages.length">Scan</a></li>
+                    <li><a href="#" v-on:click="promptToAddNewKey" v-if="languages.length">New Key</a></li>
+                    <li><a href="#" v-on:click="save" v-if="languages.length">Save</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <div class="container">
-        <div class="row">
+        <div class="row" v-if="baseLanguage && translations[baseLanguage]">
             <div class="col-sm-6">
                 <div class="input-group">
                     <div class="input-group-addon">Search</div>
@@ -132,6 +131,18 @@
                 </h4>
 
             </div>
+        </div>
+
+        <div v-else>
+            <p class="text-muted text-center">
+                There are no JSON translation keys in your project, start by creating json <br>
+                files for every language in your "resources/lang" directory.
+            </p>
+
+            <p class="text-muted text-center">
+                In case you have the files already created, you may now start adding keys or <br>
+                let Langman scan your project for lines to translate.
+            </p>
         </div>
     </div>
 
@@ -209,15 +220,33 @@
             /**
              * Add a new translation key.
              */
-            addNewKey: function () {
+            promptToAddNewKey: function () {
                 var that = this,
                         key = prompt("Please enter the new key");
 
                 if (key != null) {
-                    _.forEach(this.languages, function (lang) {
-                        that.$set(that.translations[lang], key, '');
-                    });
+                    this.addNewKey(key);
                 }
+            },
+
+
+            /**
+             * Add a new translation key
+             */
+            addNewKey: function (key) {
+                var that = this;
+
+                if (that.translations[this.baseLanguage][key] !== undefined) {
+                    return alert('This key already exists.');
+                }
+
+                _.forEach(this.languages, function (lang) {
+                    if (!that.translations[lang]) {
+                        that.translations[lang] = {};
+                    }
+
+                    that.$set(that.translations[lang], key, '');
+                });
             },
 
 
@@ -259,9 +288,15 @@
 
                 $.post('/langman/sync', {_token: "{{csrf_token()}}"})
                         .done(function (response) {
-                            that.translations = response.translations;
+                            if (response.length) {
+                                _.forEach(response, function (key) {
+                                    that.addNewKey(key);
+                                });
 
-                            alert('Langman searched your files & found new keys to translate.');
+                                return alert('Langman searched your files & found new keys to translate.');
+                            }
+
+                            alert('No new keys were found.');
                         })
             }
         }
