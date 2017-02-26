@@ -45,20 +45,11 @@ class LangmanServiceProvider extends ServiceProvider
     protected function registerRoutes()
     {
         $this->app['router']->group(config('langmanGUI.routeGroupConfig'), function ($router) {
-            $router->get('/langman', function () {
-                return view('langmanGUI::admin', [
-                    'translations' => app(Manager::class)->getTranslations(),
-                    'languages' => array_keys(app(Manager::class)->getTranslations())
-                ]);
-            });
+            $router->get('/langman', 'LangmanController@index');
 
-            $router->post('/langman/sync', function () {
-                return response(app(Manager::class)->sync());
-            });
+            $router->post('/langman/sync', 'LangmanController@sync');
 
-            $router->post('/langman/save', function () {
-                app(Manager::class)->saveTranslations(request()->translations);
-            });
+            $router->post('/langman/save', 'LangmanController@save');
         });
     }
 }

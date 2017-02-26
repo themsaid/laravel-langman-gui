@@ -4,6 +4,7 @@ return [
     'base_language' => 'en',
 
     'routeGroupConfig' => [
-        'middleware' => ['web']
+        'middleware' => ['web'],
+        'namespace' => 'Themsaid\LangmanGUI'
     ]
 ];
