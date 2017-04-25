@@ -79,7 +79,7 @@ class Manager
     /**
      * Synchronize the language keys from files.
      *
-     * @return object
+     * @return array
      */
     public function sync()
     {
@@ -99,7 +99,7 @@ class Manager
             }
         }
 
-        return array_unique($output);
+        return array_values(array_unique($output));
     }
 
     /**

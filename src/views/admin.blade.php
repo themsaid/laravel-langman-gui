@@ -86,7 +86,7 @@
                     </li>
                     <li><a href="#" v-on:click="sync" v-if="languages.length">Scan</a></li>
                     <li><a href="#" v-on:click="promptToAddNewKey" v-if="languages.length">New Key</a></li>
-                    <li><a href="#" v-on:click="save" v-if="languages.length">Save</a></li>
+                    <li><a href="#" v-on:click="save" v-if="languages.length">Save <span v-if="this.hasChanges" class="label label-danger">M</span></a></li>
                 </ul>
             </div>
         </div>
@@ -104,8 +104,10 @@
                     <a href="#" v-for="line in filteredTranslations"
                        v-on:click="selectedKey = line.key"
                        :class="['list-group-item', {'list-group-item-danger': !line.value}]">
+
                         <h5 class="list-group-item-heading">@{{ line.key }}</h5>
                         <p class="list-group-item-text">@{{ line.value }}</p>
+
                     </a>
                 </ul>
             </div>
@@ -157,7 +159,8 @@
             selectedLanguage: '{!! config('langmanGUI.base_language') !!}',
             languages: {!! json_encode($languages) !!},
             translations: {!! json_encode($translations) !!},
-            selectedKey: null
+            selectedKey: null,
+            hasChanges: false
         },
 
 
@@ -165,13 +168,9 @@
          * The Vue component is ready.
          */
         mounted: function () {
-            var that = this;
+            this.addValuesToBaseLanguage();
 
-            _.forEach(this.translations[this.baseLanguage], function (value, key) {
-                if (!value) {
-                    that.translations[that.baseLanguage][key] = key;
-                }
-            });
+            this.confirmBeforeLeavingWithChanges('translations');
         },
 
 
@@ -247,6 +246,8 @@
 
                     that.$set(that.translations[lang], key, '');
                 });
+
+                that.addValuesToBaseLanguage();
             },
 
 
@@ -293,11 +294,45 @@
                                     that.addNewKey(key);
                                 });
 
+                                that.addValuesToBaseLanguage();
+
                                 return alert('Langman searched your files & found new keys to translate.');
                             }
 
                             alert('No new keys were found.');
                         })
+            },
+
+
+            /**
+             * Ask the user for confirmation before leaving if changes exist.
+             */
+            confirmBeforeLeavingWithChanges: function (objectToWatch) {
+                var that = this;
+
+                this.$watch(objectToWatch, function () {
+                    that.hasChanges = true;
+
+                    if (!window.onbeforeunload) {
+                        window.onbeforeunload = function () {
+                            return 'Are you sure you want to leave?';
+                        };
+                    }
+                }, {deep: true});
+            },
+
+
+            /**
+             * Add values to the base language used.
+             */
+            addValuesToBaseLanguage: function () {
+                var that = this;
+
+                _.forEach(this.translations[this.baseLanguage], function (value, key) {
+                    if (!value) {
+                        that.translations[that.baseLanguage][key] = key;
+                    }
+                });
             }
         }
     })

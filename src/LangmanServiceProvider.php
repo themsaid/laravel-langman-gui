@@ -44,7 +44,7 @@ class LangmanServiceProvider extends ServiceProvider
      */
     protected function registerRoutes()
     {
-        $this->app['router']->group(config('langmanGUI.routeGroupConfig'), function ($router) {
+        $this->app['router']->group(config('langmanGUI.route_group_config'), function ($router) {
             $router->get('/langman', 'LangmanController@index');
 
             $router->post('/langman/sync', 'LangmanController@sync');
