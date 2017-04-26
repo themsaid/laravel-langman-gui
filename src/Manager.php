@@ -60,7 +60,7 @@ class Manager
      */
     public function getTranslations($reload = false)
     {
-        if ($this->translations && $reload) {
+        if ($this->translations && !$reload) {
             return $this->translations;
         }
 
