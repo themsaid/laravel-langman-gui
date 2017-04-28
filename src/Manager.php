@@ -130,7 +130,7 @@ class Manager
          *
          * https://github.com/barryvdh/laravel-translation-manager/blob/master/src/Manager.php
          */
-        $functions = ['__'];
+        $functions = config('langmanGUI.functions', ['__']);
 
         $pattern =
             // See https://regex101.com/r/jS5fX0/3
