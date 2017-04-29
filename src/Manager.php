@@ -130,12 +130,13 @@ class Manager
          *
          * https://github.com/barryvdh/laravel-translation-manager/blob/master/src/Manager.php
          */
-        $functions = ['__'];
+        $functions = config('langmanGUI.functions', ['__']);
 
         $pattern =
             // See https://regex101.com/r/jS5fX0/3
             '[^\w]'. // Must not start with any alphanum or _
             '(?<!->)'. // Must not start with ->
+            '(?<!(function ))'. // Must not start with 'function '
             '('.implode('|', $functions).')'.// Must start with one of the functions
             "\(".// Match opening parentheses
             "[\'\"]".// Match " or '
