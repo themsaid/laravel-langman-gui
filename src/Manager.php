@@ -60,7 +60,7 @@ class Manager
      */
     public function getTranslations($reload = false)
     {
-        if ($this->translations && !$reload) {
+        if ($this->translations && ! $reload) {
             return $this->translations;
         }
 
@@ -130,7 +130,7 @@ class Manager
          *
          * https://github.com/barryvdh/laravel-translation-manager/blob/master/src/Manager.php
          */
-        $functions = config('langmanGUI.functions', ['__']);
+        $functions = config('langmanGUI.localization_methods', ['__']);
 
         $pattern =
             // See https://regex101.com/r/jS5fX0/3
