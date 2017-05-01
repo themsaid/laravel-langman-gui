@@ -103,6 +103,8 @@ class Manager
     }
 
     /**
+     * Save translations.
+     *
      * @param $translations
      */
     public function saveTranslations($translations)
