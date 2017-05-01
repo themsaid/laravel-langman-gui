@@ -103,7 +103,7 @@ class Manager
     }
 
     /**
-     * Save translations.
+     * Save the given translations.
      *
      * @param $translations
      */
