@@ -5,7 +5,7 @@ Langman is a GUI for managing your JSON language files in a Laravel project.
 <br>
 <br>
 
-<img src="https://s10.postimg.org/d04uun5e1/Screen_Shot_2017-04-25_at_10.22.06_AM.png" alt="Laravel Langman">
+<img src="https://s29.postimg.org/7akan2387/Screen_Shot_2017-04-25_at_10.22.06_AM_ar.png" alt="Laravel Langman">
 </p>
 
 ## Installation
@@ -36,7 +36,7 @@ your changes to the language JSON files.
 
 <img src="https://s10.postimg.org/km3yx5a8p/Screen_Shot_2017-04-25_at_10.11.08_AM.png" alt="Laravel Langman">
 
-<img src="https://s7.postimg.org/ca7ys45qj/Screen_Shot_2017-04-25_at_10.11.42_AM.png" alt="Laravel Langman">
+<img src="https://s9.postimg.org/cnvxiharj/Screen_Shot_2017-04-25_at_10.11.42_AM_ar.png" alt="Laravel Langman">
 
 ## Backup
 
