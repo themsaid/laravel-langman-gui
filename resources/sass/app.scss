@@ -1,0 +1,62 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+
+body {
+  padding-bottom: 20px;
+  background: #F6F7FB;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+.navbar {
+  background: #fff;
+  box-shadow: 0 4px 6px -3px #e2e5ef;
+
+  .navbar-brand {
+    color: #FF7674;
+
+    &:hover {
+      color: #FF7674;
+    }
+  }
+}
+
+.mainSearch {
+  box-shadow: 0 0 5px 0 #e2e5ef;
+
+  .input-group-addon {
+    border: none;
+    background: #fff;
+    border-radius: 0;
+  }
+
+  input {
+    border: none;
+    border-radius: 0;
+  }
+}
+
+.list-group {
+  border-radius: 0;
+  border: 0;
+  box-shadow: 0 0 5px 0 #F6F7FB;
+}
+
+.list-group-item {
+  border-radius: 0 !important;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-color: #dedfe3;
+
+  &:first-child {
+    border-top: none;
+  }
+}
+
+textarea.form-control {
+  border-radius: 0;
+  border: 0;
+  box-shadow: 0 0 5px 0 #e2e5ef;
+}

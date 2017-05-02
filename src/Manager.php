@@ -45,7 +45,7 @@ class Manager
      * @param string $languageFilesPath
      * @param array $lookupPaths
      */
-    public function __construct(Filesystem $disk, string $languageFilesPath, array $lookupPaths)
+    public function __construct(Filesystem $disk, $languageFilesPath, array $lookupPaths)
     {
         $this->disk = $disk;
         $this->languageFilesPath = $languageFilesPath;
@@ -118,6 +118,20 @@ class Manager
 
             file_put_contents($filename, json_encode($lines, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
+    }
+
+    /**
+     * Add a new JSON language file.
+     *
+     * @param $language
+     */
+    public function addLanguage($language)
+    {
+        $this->backup();
+
+        file_put_contents($this->languageFilesPath.DIRECTORY_SEPARATOR."$language.json",
+            json_encode((object) [], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+        );
     }
 
     /**

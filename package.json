@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "node_modules/webpack/bin/webpack.js --progress --hide-modules --config=webpack.config.js",
+    "watch": "node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=webpack.config.js"
+  },
+  "devDependencies": {
+    "bootstrap": "4.0.0-alpha.6",
+    "tether": "^1.4.0",
+    "copy-webpack-plugin": "^4.0.1",
+    "cpy-cli": "^1.0.1",
+    "css-loader": "^0.28.0",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.10.1",
+    "ignore-loader": "^0.1.2",
+    "jquery": "^3.1.0",
+    "lodash": "^4.16.2",
+    "node-notifier": "^5.0.2",
+    "node-sass": "^4.0.0",
+    "on-build-webpack": "^0.1.0",
+    "path": "^0.12.7",
+    "resolve-url-loader": "^1.6.1",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1",
+    "vue": "^2.0.1",
+    "webpack": "^2.2.0"
+  }
+}

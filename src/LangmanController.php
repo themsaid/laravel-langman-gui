@@ -14,7 +14,7 @@ class LangmanController
      */
     public function index()
     {
-        return view('langmanGUI::admin', [
+        return view('langmanGUI::index', [
             'translations' => app(Manager::class)->getTranslations(),
             'languages' => array_keys(app(Manager::class)->getTranslations())
         ]);
@@ -25,7 +25,7 @@ class LangmanController
      *
      * @return Response
      */
-    public function sync()
+    public function scan()
     {
         return response(app(Manager::class)->sync());
     }
@@ -38,5 +38,15 @@ class LangmanController
     public function save()
     {
         app(Manager::class)->saveTranslations(request()->translations);
+    }
+
+    /**
+     * Save the translations
+     *
+     * @return void
+     */
+    public function addLanguage()
+    {
+        app(Manager::class)->addLanguage(request()->language);
     }
 }

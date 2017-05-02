@@ -5,7 +5,13 @@ Langman is a GUI for managing your JSON language files in a Laravel project.
 <br>
 <br>
 
-<img src="https://s10.postimg.org/d04uun5e1/Screen_Shot_2017-04-25_at_10.22.06_AM.png" alt="Laravel Langman">
+<img src="https://s14.postimg.org/j99tukfch/Screen_Shot_2017-05-02_at_9.56.49_AM.png" alt="Laravel Langman">
+
+<br>
+
+<a href="https://packagist.org/packages/themsaid/laravel-langman-gui"><img src="https://poser.pugx.org/themsaid/laravel-langman/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/themsaid/laravel-langman-gui"><img src="https://poser.pugx.org/themsaid/laravel-langman/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/themsaid/laravel-langman-gui"><img src="https://poser.pugx.org/themsaid/laravel-langman/license.svg" alt="License"></a>
 </p>
 
 ## Installation
@@ -22,10 +28,10 @@ Once done, add the following line in your providers array of `config/app.php`:
 Themsaid\LangmanGUI\LangmanServiceProvider::class
 ```
 
-Then publish the configuration file:
+Then publish the configuration file & assets:
 
 ```
-php artisan vendor:publish --provider="Themsaid\LangmanGUI\LangmanServiceProvider"
+php artisan vendor:publish --provider=Themsaid\\LangmanGUI\\LangmanServiceProvider
 ```
 
 ## Usage
@@ -33,10 +39,6 @@ php artisan vendor:publish --provider="Themsaid\LangmanGUI\LangmanServiceProvide
 Once you have added the Service Provider point your browser to `http://project.dev/langman`, using this interface you'll be able to
 browse translation keys in different languages, add/remove keys, scan your project files for missing translations, and finally save
 your changes to the language JSON files.
-
-<img src="https://s10.postimg.org/km3yx5a8p/Screen_Shot_2017-04-25_at_10.11.08_AM.png" alt="Laravel Langman">
-
-<img src="https://s7.postimg.org/ca7ys45qj/Screen_Shot_2017-04-25_at_10.11.42_AM.png" alt="Laravel Langman">
 
 ## Backup
 

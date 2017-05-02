@@ -16,7 +16,11 @@ class LangmanServiceProvider extends ServiceProvider
             __DIR__.'/../config/langmanGUI.php' => config_path('langmanGUI.php'),
         ], 'config');
 
-        $this->loadViewsFrom(__DIR__.'/views', 'langmanGUI');
+        $this->publishes([
+            __DIR__.'/../public' => public_path('vendor/langman'),
+        ], 'assets');
+
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'langmanGUI');
 
         $this->registerRoutes();
     }
@@ -47,9 +51,11 @@ class LangmanServiceProvider extends ServiceProvider
         $this->app['router']->group(config('langmanGUI.route_group_config'), function ($router) {
             $router->get('/langman', 'LangmanController@index');
 
-            $router->post('/langman/sync', 'LangmanController@sync');
+            $router->post('/langman/scan', 'LangmanController@scan');
 
             $router->post('/langman/save', 'LangmanController@save');
+
+            $router->post('/langman/add-language', 'LangmanController@addLanguage');
         });
     }
 }
