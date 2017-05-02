@@ -4,15 +4,11 @@
 Langman is a GUI for managing your JSON language files in a Laravel project.
 <br>
 <br>
-
 <img src="https://s14.postimg.org/j99tukfch/Screen_Shot_2017-05-02_at_9.56.49_AM.png" alt="Laravel Langman">
-
 <br>
-
 <a href="https://packagist.org/packages/themsaid/laravel-langman-gui"><img src="https://poser.pugx.org/themsaid/laravel-langman-gui/v/stable.svg" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/themsaid/laravel-langman-gui"><img src="https://poser.pugx.org/themsaid/laravel-langman-gui/d/total.svg" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/themsaid/laravel-langman-gui"><img src="https://poser.pugx.org/themsaid/laravel-langman-gui/license.svg" alt="License"></a>
-
 </p>
 
 ## Installation
