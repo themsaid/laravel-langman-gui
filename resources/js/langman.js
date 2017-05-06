@@ -80,9 +80,9 @@ new Vue({
          * Add a new translation key
          */
         addNewKey(key) {
-            if (this.translations[this.baseLanguage][key] !== undefined) {
+            /*if (this.translations[this.baseLanguage][key] !== undefined) {
                 return alert('This key already exists.');
-            }
+            }*/ //Really annoying behavior...
 
             _.forEach(this.languages, lang => {
                 if (!this.translations[lang]) {
@@ -125,6 +125,8 @@ new Vue({
                     type: 'POST', contentType: 'application/json'
                 }).done(_ => {
                     this.languages.push(key);
+                    alert('You created new language.');
+                    location.reload();
                 })
             }
         },
@@ -141,6 +143,22 @@ new Vue({
             }).done(function () {
                 alert('Saved Successfully.');
             })
+        },
+        
+        /**
+         * Delete the language.
+         */
+        deleteLanguage() {
+          if (confirm('Are you sure you want delete '+this.selectedLanguage+' language?!')) {
+            $.ajax('/langman/delete', {
+              data: JSON.stringify({language: this.selectedLanguage}),
+              headers: {"X-CSRF-TOKEN": langman.csrf},
+              type: 'POST', contentType: 'application/json'
+            }).done(_ => {
+              alert('You deleted language.');
+              location.reload();
+            });
+          }
         },
 
 
