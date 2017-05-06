@@ -41,6 +41,16 @@ class LangmanController
     }
 
     /**
+     * Delete the language
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        app(Manager::class)->deleteLanguage(request()->language);
+    }
+
+    /**
      * Save the translations
      *
      * @return void
