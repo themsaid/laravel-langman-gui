@@ -7,6 +7,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use File;
 
 class Manager
 {
@@ -118,6 +119,17 @@ class Manager
 
             file_put_contents($filename, json_encode($lines, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
+    }
+
+    /**
+     * Delete the given language.
+     *
+     * @param $language
+     */
+    public function deleteLanguage($language)
+    {
+        $this->backup();
+        File::delete($this->languageFilesPath.DIRECTORY_SEPARATOR."$language.json");
     }
 
     /**
