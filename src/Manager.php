@@ -149,7 +149,7 @@ class Manager
         $functions = config('langmanGUI.localization_methods', ['__']);
 
         $pattern =
-            // See https://regex101.com/r/jS5fX0/3
+            // See https://regex101.com/r/jS5fX0/5
             '[^\w]'. // Must not start with any alphanum or _
             '(?<!->)'. // Must not start with ->
             '('.implode('|', $functions).')'.// Must start with one of the functions
@@ -158,8 +158,8 @@ class Manager
             '('.// Start a new group to match:
             '.+'.// Must start with group
             ')'.// Close group
-            "[\'\"]\s?".// Closing quote with optional space character
-            "[\),]"  // Close parentheses or new parameter
+            "[\'\"]?".// Closing quote
+            "[\s\),]"  // Close parentheses optional space character or new parameter
         ;
 
         $allMatches = [];
