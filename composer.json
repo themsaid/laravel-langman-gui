@@ -23,5 +23,12 @@
         "psr-4": {
             "Themsaid\\LangmanGUI\\": "src"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Themsaid\\LangmanGUI\\LangmanServiceProvider"
+            ]
+        }
     }
 }
