@@ -55,6 +55,8 @@ class LangmanServiceProvider extends ServiceProvider
 
             $router->post('/langman/save', 'LangmanController@save');
 
+            $router->post('/langman/delete', 'LangmanController@delete');
+
             $router->post('/langman/add-language', 'LangmanController@addLanguage');
         });
     }

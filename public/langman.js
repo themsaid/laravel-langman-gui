@@ -42755,7 +42755,6 @@ new Vue({
             }
         },
 
-
         /**
          * Add a new translation key
          */
@@ -42764,6 +42763,21 @@ new Vue({
                 return alert('This key already exists.');
             }
 
+            _.forEach(this.languages, lang => {
+                if (!this.translations[lang]) {
+                    this.translations[lang] = {};
+                }
+
+                this.$set(this.translations[lang], key, '');
+            });
+            alert("Key was added.");
+            this.addValuesToBaseLanguage();
+        },
+
+        /**
+         * Add a new translation keys for scan
+         */
+        addNewKeysForScan(key) {
             _.forEach(this.languages, lang => {
                 if (!this.translations[lang]) {
                     this.translations[lang] = {};
@@ -42796,16 +42810,20 @@ new Vue({
         addLanguage() {
             var key = prompt("Enter language key (e.g \"en\")");
 
-            this.languages.push(key);
-
-            if (key != null) {
-                $.ajax('/langman/add-language', {
-                    data: JSON.stringify({language: key}),
-                    headers: {"X-CSRF-TOKEN": langman.csrf},
-                    type: 'POST', contentType: 'application/json'
-                }).done(_ => {
-                    this.languages.push(key);
-                })
+            if (key == '') {
+                alert("Field can\'t be empty");
+            }
+            else
+            {
+              $.ajax('/langman/add-language', {
+                data: JSON.stringify({language: key}),
+                headers: {"X-CSRF-TOKEN": langman.csrf},
+                type: 'POST', contentType: 'application/json'
+              }).done(_ => {
+                this.languages.push(key);
+                alert('You created new language.');
+                location.reload();
+              });
             }
         },
 
@@ -42823,6 +42841,22 @@ new Vue({
             })
         },
 
+        /**
+         * Delete the language.
+         */
+        deleteLanguage() {
+          if (confirm('Are you sure you want delete "'+this.selectedLanguage+'" language?!')) {
+            $.ajax('/langman/delete', {
+              data: JSON.stringify({language: this.selectedLanguage}),
+              headers: {"X-CSRF-TOKEN": langman.csrf},
+              type: 'POST', contentType: 'application/json'
+            }).done(_ => {
+              alert('You deleted language.');
+              location.reload();
+            });
+          }
+        },
+
 
         /**
          * Collect untranslated strings from project files.
@@ -42832,7 +42866,7 @@ new Vue({
                 .done(response => {
                     if (response.length) {
                         _.forEach(response, key => {
-                            this.addNewKey(key);
+                            this.addNewKeysForScan(key);
                         });
 
                         this.addValuesToBaseLanguage();
@@ -42841,7 +42875,7 @@ new Vue({
                     }
 
                     alert('No new keys were found.');
-                })
+                });
         },
 
 

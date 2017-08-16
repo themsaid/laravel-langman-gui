@@ -41,15 +41,18 @@
                     </div>
                 </li>
             </ul>
-            <button class="btn btn-outline-info btn-sm mr-2"
-                    v-on:click="promptToAddNewKey" v-if="languages.length"
-                    type="button">Add
+            <button onmouseenter="this.style.cursor='pointer';" onmouseleave="this.style.cursor='default';" class="btn btn-outline-primary btn-sm mr-2" v-on:click="addLanguage">Add Language</button>
+            <button onmouseenter="this.style.cursor='pointer';" onmouseleave="this.style.cursor='default';" class="btn btn-outline-danger btn-sm mr-2" v-on:click="deleteLanguage" v-if="languages.length" type="button">Delete language
             </button>
-            <button class="btn btn-outline-info btn-sm mr-2"
+            <button onmouseenter="this.style.cursor='pointer';" onmouseleave="this.style.cursor='default';" class="btn btn-outline-info btn-sm mr-2"
+                    v-on:click="promptToAddNewKey" v-if="languages.length"
+                    type="button">Add key
+            </button>
+            <button onmouseenter="this.style.cursor='pointer';" onmouseleave="this.style.cursor='default';" class="btn btn-outline-info btn-sm mr-2"
                     v-on:click="scanForKeys" v-if="languages.length"
                     type="button">Scan
             </button>
-            <button class="btn btn-outline-success btn-sm"
+            <button onmouseenter="this.style.cursor='pointer';" onmouseleave="this.style.cursor='default';" class="btn btn-outline-success btn-sm mr-2"
                     v-on:click="save" v-if="languages.length"
                     type="button">Save
                 <small v-if="this.hasChanges" class="text-danger">&#9679;</small>

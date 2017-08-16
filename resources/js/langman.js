@@ -18,7 +18,7 @@ new Vue({
     /**
      * The component has been created by Vue.
      */
-    mounted() {
+     mounted() {
         this.addValuesToBaseLanguage();
 
         this.confirmBeforeLeavingWithChanges('translations');
@@ -28,14 +28,14 @@ new Vue({
         /**
          * List of filtered translation keys.
          */
-        filteredTranslations() {
+         filteredTranslations() {
             if (this.searchPhrase) {
                 return _.chain(this.currentLanguageTranslations)
-                    .pickBy(line => {
-                        return line.key.toLowerCase().indexOf(this.searchPhrase.toLowerCase()) > -1;
-                    })
-                    .sortBy('value')
-                    .value();
+                .pickBy(line => {
+                    return line.key.toLowerCase().indexOf(this.searchPhrase.toLowerCase()) > -1;
+                })
+                .sortBy('value')
+                .value();
             }
 
             return _.sortBy(this.currentLanguageTranslations, 'value');
@@ -45,7 +45,7 @@ new Vue({
         /**
          * List of translation lines from the current language.
          */
-        currentLanguageTranslations() {
+         currentLanguageTranslations() {
             return _.map(this.translations[this.selectedLanguage], (value, key) => {
                 return {key: key, value: value ? value : ''};
             });
@@ -55,7 +55,7 @@ new Vue({
         /**
          * List of untranslated keys from the current language.
          */
-        currentLanguageUntranslatedKeys() {
+         currentLanguageUntranslatedKeys() {
             return _.filter(this.translations[this.selectedLanguage], value => {
                 return !value;
             });
@@ -67,7 +67,7 @@ new Vue({
         /**
          * Add a new translation key.
          */
-        promptToAddNewKey() {
+         promptToAddNewKey() {
             var key = prompt("Please enter the new key");
 
             if (key != null) {
@@ -79,7 +79,7 @@ new Vue({
         /**
          * Add a new translation key
          */
-        addNewKey(key) {
+         addNewKey(key) {
             if (this.translations[this.baseLanguage][key] !== undefined) {
                 return alert('This key already exists.');
             }
@@ -95,11 +95,26 @@ new Vue({
             this.addValuesToBaseLanguage();
         },
 
+        /**
+         * Add a new translation keys for scan
+         */
+         addNewKeysForScan(key) {
+            _.forEach(this.languages, lang => {
+                if (!this.translations[lang]) {
+                    this.translations[lang] = {};
+                }
+
+                this.$set(this.translations[lang], key, '');
+            });
+
+            this.addValuesToBaseLanguage();
+        },
+
 
         /**
          * Remove the given key from all languages.
          */
-        removeKey(key) {
+         removeKey(key) {
             if (confirm('Are you sure you want to remove "' + key + '"')) {
                 _.forEach(this.languages, lang => {
                     this.translations[lang] = _.omit(this.translations[lang], [key]);
@@ -113,19 +128,23 @@ new Vue({
         /**
          * Add a new language file.
          */
-        addLanguage() {
+         addLanguage() {
             var key = prompt("Enter language key (e.g \"en\")");
 
-            this.languages.push(key);
-
-            if (key != null) {
-                $.ajax('/langman/add-language', {
-                    data: JSON.stringify({language: key}),
-                    headers: {"X-CSRF-TOKEN": langman.csrf},
-                    type: 'POST', contentType: 'application/json'
-                }).done(_ => {
-                    this.languages.push(key);
-                })
+            if (key == '') {
+                alert("Field can\'t be empty");
+            }
+            else
+            {
+              $.ajax('/langman/add-language', {
+                data: JSON.stringify({language: key}),
+                headers: {"X-CSRF-TOKEN": langman.csrf},
+                type: 'POST', contentType: 'application/json'
+            }).done(_ => {
+                this.languages.push(key);
+                alert('You created new language.');
+                location.reload();
+            });
             }
         },
 
@@ -133,7 +152,7 @@ new Vue({
         /**
          * Save the translation lines.
          */
-        save() {
+         save() {
             $.ajax('/langman/save', {
                 data: JSON.stringify({translations: this.translations}),
                 headers: {"X-CSRF-TOKEN": langman.csrf},
@@ -143,32 +162,48 @@ new Vue({
             })
         },
 
+        /**
+         * Delete the language.
+         */
+        deleteLanguage() {
+          if (confirm('Are you sure you want delete "'+this.selectedLanguage+'" language?!')) {
+            $.ajax('/langman/delete', {
+              data: JSON.stringify({language: this.selectedLanguage}),
+              headers: {"X-CSRF-TOKEN": langman.csrf},
+              type: 'POST', contentType: 'application/json'
+            }).done(_ => {
+              alert('You deleted language.');
+              location.reload();
+            });
+          }
+        },
+
 
         /**
          * Collect untranslated strings from project files.
          */
-        scanForKeys() {
+         scanForKeys() {
             $.post('/langman/scan', {_token: langman.csrf})
-                .done(response => {
-                    if (response.length) {
-                        _.forEach(response, key => {
-                            this.addNewKey(key);
-                        });
+            .done(response => {
+                if (response.length) {
+                    _.forEach(response, key => {
+                        this.addNewKeysForScan(key);
+                    });
 
-                        this.addValuesToBaseLanguage();
+                    this.addValuesToBaseLanguage();
 
-                        return alert('Langman searched your files & found new keys to translate.');
-                    }
+                    return alert('Langman searched your files & found new keys to translate.');
+                }
 
-                    alert('No new keys were found.');
-                })
+                alert('No new keys were found.');
+            })
         },
 
 
         /**
          * Ask the user for confirmation before leaving if changes exist.
          */
-        confirmBeforeLeavingWithChanges(objectToWatch) {
+         confirmBeforeLeavingWithChanges(objectToWatch) {
             this.$watch(objectToWatch, function () {
                 this.hasChanges = true;
 
@@ -184,7 +219,7 @@ new Vue({
         /**
          * Add values to the base language used.
          */
-        addValuesToBaseLanguage() {
+         addValuesToBaseLanguage() {
             _.forEach(this.translations[this.baseLanguage], (value, key) => {
                 if (!value) {
                     this.translations[this.baseLanguage][key] = key;
