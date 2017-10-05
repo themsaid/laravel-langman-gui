@@ -153,13 +153,13 @@ class Manager
             '[^\w]'. // Must not start with any alphanum or _
             '(?<!->)'. // Must not start with ->
             '('.implode('|', $functions).')'.// Must start with one of the functions
-            "\(\s?".// Match opening parentheses with optional space character
+            "\(".// Match opening parentheses
             "[\'\"]".// Match " or '
             '('.// Start a new group to match:
             '.+'.// Must start with group
             ')'.// Close group
-            "[\'\"]?".// Closing quote
-            "[\s\),]"  // Close parentheses optional space character or new parameter
+            "[\'\"]".// Closing quote
+            "[\),]"  // Close parentheses or new parameter
         ;
 
         $allMatches = [];
