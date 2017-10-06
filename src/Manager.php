@@ -64,14 +64,7 @@ class Manager
             return $this->translations;
         }
 
-        collect($this->disk->allFiles($this->languageFilesPath))
-            ->filter(function ($file) {
-                return $this->disk->extension($file) == 'json';
-            })
-            ->each(function ($file) {
-                $this->translations[str_replace('.json', '', $file->getFilename())]
-                    = json_decode($file->getContents());
-            });
+        $this->getJsonTranslations();
 
         return $this->translations;
     }
@@ -185,5 +178,24 @@ class Manager
         }
 
         $this->disk->copyDirectory(resource_path('lang'), storage_path('langmanGUI/'.time()));
+    public function getJsonTranslations()
+    {
+        collect($this->disk->allFiles($this->languageFilesPath))
+            ->filter(function ($file) {
+                return $this->disk->extension($file) == 'json';
+            })
+            ->each(function ($file) {
+                $translations = json_decode($file->getContents(), true);
+                $this->addTranslations(str_replace('.json', '', $file->getFilename()), $file->getFilename(), $translations ?: []);
+            });
+    }
+    /**
+     * @param $language
+     * @param $filename
+     * @param array $translations
+     */
+    private function addTranslations($language, $filename, array $translations)
+    {
+        isset($this->translations[$language][$filename]) ? $this->translations[$language][$filename] += $translations : $this->translations[$language][$filename] = $translations;
     }
 }
