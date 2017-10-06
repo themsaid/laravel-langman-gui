@@ -8,7 +8,9 @@ new Vue({
             searchPhrase: '',
             baseLanguage: langman.baseLanguage,
             selectedLanguage: langman.baseLanguage,
+            selectedFile: Object.keys(langman.translations[langman.baseLanguage])[0],
             languages: langman.languages,
+            files: Object.keys(langman.translations[langman.baseLanguage]),
             translations: langman.translations,
             selectedKey: null,
             hasChanges: false
@@ -20,8 +22,6 @@ new Vue({
      */
     mounted() {
         this.addValuesToBaseLanguage();
-
-        this.confirmBeforeLeavingWithChanges('translations');
     },
 
     computed: {
@@ -46,7 +46,7 @@ new Vue({
          * List of translation lines from the current language.
          */
         currentLanguageTranslations() {
-            return _.map(this.translations[this.selectedLanguage], (value, key) => {
+            return _.map(this.translations[this.selectedLanguage][this.selectedFile], (value, key) => {
                 return {key: key, value: value ? value : ''};
             });
         },
@@ -56,7 +56,7 @@ new Vue({
          * List of untranslated keys from the current language.
          */
         currentLanguageUntranslatedKeys() {
-            return _.filter(this.translations[this.selectedLanguage], value => {
+            return _.filter(this.translations[this.selectedLanguage][this.selectedFile], value => {
                 return !value;
             });
         }
@@ -80,16 +80,16 @@ new Vue({
          * Add a new translation key
          */
         addNewKey(key) {
-            if (this.translations[this.baseLanguage][key] !== undefined) {
+            if (this.translations[this.baseLanguage][this.selectedFile][key] !== undefined) {
                 return alert('This key already exists.');
             }
 
             _.forEach(this.languages, lang => {
-                if (!this.translations[lang]) {
-                    this.translations[lang] = {};
+                if (!this.translations[lang][this.selectedFile]) {
+                    this.translations[lang][this.selectedFile] = {};
                 }
 
-                this.$set(this.translations[lang], key, '');
+                this.$set(this.translations[lang][this.selectedFile], key, '');
             });
 
             this.addValuesToBaseLanguage();
@@ -102,7 +102,9 @@ new Vue({
         removeKey(key) {
             if (confirm('Are you sure you want to remove "' + key + '"')) {
                 _.forEach(this.languages, lang => {
-                    this.translations[lang] = _.omit(this.translations[lang], [key]);
+                    _.forEach(this.files, file => {
+                        this.translations[lang][file] = _.omit(this.translations[lang][file], [key]);
+                    });
                 });
 
                 this.selectedKey = null;
@@ -134,11 +136,13 @@ new Vue({
          * Save the translation lines.
          */
         save() {
+            var self = this;
             $.ajax('/langman/save', {
                 data: JSON.stringify({translations: this.translations}),
                 headers: {"X-CSRF-TOKEN": langman.csrf},
                 type: 'POST', contentType: 'application/json'
             }).done(function () {
+                self.hasChanges = false;
                 alert('Saved Successfully.');
             })
         },
@@ -165,7 +169,18 @@ new Vue({
         },
 
         /**
+         * Add values to the base language used.
          */
+        addValuesToBaseLanguage() {
+            _.forEach(this.files, file => {
+                _.forEach(this.translations[this.baseLanguage][file], (value, key) => {
+                    if (!value) {
+                        this.translations[this.baseLanguage][file][key] = key;
+                    }
+                });
+            });            
+        }
+    },
 
     watch: {
         translations:  {
@@ -175,16 +190,6 @@ new Vue({
             deep: true
         },
 
-
-        /**
-         * Add values to the base language used.
-         */
-        addValuesToBaseLanguage() {
-            _.forEach(this.translations[this.baseLanguage], (value, key) => {
-                if (!value) {
-                    this.translations[this.baseLanguage][key] = key;
-                }
-            });
         hasChanges: function() {
             if(this.hasChanges) {
                 window.onbeforeunload = function () {
