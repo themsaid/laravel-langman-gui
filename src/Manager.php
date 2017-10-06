@@ -105,12 +105,22 @@ class Manager
     {
         $this->backup();
 
-        foreach ($translations as $lang => $lines) {
-            $filename = $this->languageFilesPath.DIRECTORY_SEPARATOR."$lang.json";
+        foreach ($translations as $lang => $file) {
 
-            ksort($lines);
+            foreach($file as $name => $lines) {
 
-            file_put_contents($filename, json_encode($lines, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+                if(is_array($lines)) ksort($lines);
+
+                if(strpos($name, '.json') !== false) {
+                    file_put_contents($this->languageFilesPath . DIRECTORY_SEPARATOR . "$name", json_encode($lines, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+                }
+
+                if(strpos($name, '.php') !== false) {
+                    file_put_contents($this->languageFilesPath . DIRECTORY_SEPARATOR . "$lang" . DIRECTORY_SEPARATOR . "$name", "<?php\n\nreturn " . var_export($lines, true) . ";".\PHP_EOL);
+                }
+
+            }
+            
         }
     }
 
