@@ -98,13 +98,19 @@
                         @{{ selectedKey }}
                     </p>
 
-                <textarea name="" rows="10" class="form-control mb-4"
-                          v-model="translations[selectedLanguage][selectedKey]"
+                    <textarea name="" rows="10" class="form-control mb-4" v-if="typeof translations[selectedLanguage][selectedFile][selectedKey] !== 'object'"
+                          v-model="translations[selectedLanguage][selectedFile][selectedKey]"
                           placeholder="Translate..."></textarea>
+
+                    <textarea name="" rows="10" class="form-control mb-4" v-if="typeof translations[selectedLanguage][selectedFile][selectedKey] === 'object'"
+                          v-for="(line, index) in translations[selectedLanguage][selectedFile][selectedKey]"
+                          v-model="translations[selectedLanguage][selectedFile][selectedKey][index]"
+                          placeholder="Translate...">@{{ line }}</textarea>
 
                     <div class="d-flex justify-content-center">
                         <button class="btn btn-outline-danger btn-sm" v-on:click="removeKey(selectedKey)">Delete this key</button>
                     </div>
+
                 </div>
 
                 <h5 class="text-muted text-center" v-else>
