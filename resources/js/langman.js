@@ -164,20 +164,15 @@ new Vue({
                 })
         },
 
-
         /**
-         * Ask the user for confirmation before leaving if changes exist.
          */
-        confirmBeforeLeavingWithChanges(objectToWatch) {
-            this.$watch(objectToWatch, function () {
-                this.hasChanges = true;
 
-                if (!window.onbeforeunload) {
-                    window.onbeforeunload = function () {
-                        return 'Are you sure you want to leave?';
-                    };
-                }
-            }, {deep: true});
+    watch: {
+        translations:  {
+            handler: function() {
+                this.hasChanges = true;
+            },
+            deep: true
         },
 
 
@@ -190,6 +185,15 @@ new Vue({
                     this.translations[this.baseLanguage][key] = key;
                 }
             });
+        hasChanges: function() {
+            if(this.hasChanges) {
+                window.onbeforeunload = function () {
+                    return 'Are you sure you want to leave?';
+                };
+            }
+            else {
+                window.onbeforeunload = null;
+            }
         }
     }
 });
