@@ -156,16 +156,16 @@ class Manager
 
         $pattern =
             // See https://regex101.com/r/jS5fX0/5
-            '[^\w]'. // Must not start with any alphanum or _
-            '(?<!->)'. // Must not start with ->
-            '('.implode('|', $functions).')'.// Must start with one of the functions
-            "\(".// Match opening parentheses
-            "[\'\"]".// Match " or '
-            '('.// Start a new group to match:
-            '.+'.// Must start with group
-            ')'.// Close group
-            "[\'\"]".// Closing quote
-            "[\),]"  // Close parentheses or new parameter
+            '[^\w]' . // Must not start with any alphanum or _
+            '(?<!->)' . // Must not start with ->
+            '(' . implode('|', $functions) . ')' .// Must start with one of the functions
+            "\(\s?" .// Match opening parentheses with optional space character
+            "[\'\"]" .// Match " or '
+            '(' .// Start a new group to match:
+            '.+' .// Must start with group
+            ')' .// Close group
+            "[\'\"]?" .// Closing quote
+            "[\s\),]"  // Close parentheses optional space character or new parameter
         ;
 
         $allMatches = [];
@@ -191,6 +191,8 @@ class Manager
         }
 
         $this->disk->copyDirectory(resource_path('lang'), storage_path('langmanGUI/'.time()));
+    }
+
     public function getJsonTranslations()
     {
         collect($this->disk->allFiles($this->languageFilesPath))
