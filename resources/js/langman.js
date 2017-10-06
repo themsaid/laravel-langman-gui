@@ -32,7 +32,7 @@ new Vue({
             if (this.searchPhrase) {
                 return _.chain(this.currentLanguageTranslations)
                     .pickBy(line => {
-                        return line.key.toLowerCase().indexOf(this.searchPhrase.toLowerCase()) > -1;
+                        return line.key.toLowerCase().indexOf(this.searchPhrase.toLowerCase()) > -1 || line.value.toLowerCase().indexOf(this.searchPhrase.toLowerCase()) > -1;
                     })
                     .sortBy('value')
                     .value();
