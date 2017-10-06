@@ -133,9 +133,11 @@ class Manager
     {
         $this->backup();
 
-        file_put_contents($this->languageFilesPath.DIRECTORY_SEPARATOR."$language.json",
-            json_encode((object) [], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+        file_put_contents($this->languageFilesPath . DIRECTORY_SEPARATOR . "$language.json",
+            json_encode((object)[], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
         );
+
+        $this->disk->makeDirectory($this->languageFilesPath . DIRECTORY_SEPARATOR . "$language");
     }
 
     /**
