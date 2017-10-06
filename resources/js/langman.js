@@ -91,8 +91,6 @@ new Vue({
 
                 this.$set(this.translations[lang][this.selectedFile], key, '');
             });
-
-            this.addValuesToBaseLanguage();
         },
 
 

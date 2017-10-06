@@ -50,7 +50,7 @@ module.exports = function (env) {
             new ExtractTextPlugin("public/langman.css"),
 
             new WebpackOnBuildPlugin(function (stats) {
-                cpy(['public/*'], './../' + env.project + '/public/vendor/langman/').then(() => {
+                cpy(['public/*'], './../../../public/vendor/langman/').then(() => {
                     notifier.notify({
                         'title': 'Build Done',
                         'message': 'Files were copied to public!'
