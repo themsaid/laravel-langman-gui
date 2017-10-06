@@ -67,6 +67,8 @@ class Manager
         $this->getJsonTranslations();
         $this->getArrayTranslations();
 
+        if(!$this->translations) $this->addLanguage(config('langmanGUI.base_language'));
+
         return $this->translations;
     }
 
