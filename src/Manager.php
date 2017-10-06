@@ -65,6 +65,7 @@ class Manager
         }
 
         $this->getJsonTranslations();
+        $this->getArrayTranslations();
 
         return $this->translations;
     }
@@ -189,6 +190,19 @@ class Manager
                 $this->addTranslations(str_replace('.json', '', $file->getFilename()), $file->getFilename(), $translations ?: []);
             });
     }
+
+    public function getArrayTranslations()
+    {
+        collect($this->disk->allFiles($this->languageFilesPath))
+            ->filter(function ($file) {
+                return $this->disk->extension($file) == 'php';
+            })
+            ->each(function ($file) {
+                $translations = $this->disk->getRequire($file->getPathname());
+                $this->addTranslations($file->getRelativePath(), $file->getFilename(), $translations ?: []);
+            });
+    }
+
     /**
      * @param $language
      * @param $filename
