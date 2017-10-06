@@ -40,6 +40,17 @@
                            class="dropdown-item" href="#">@{{ lang }}</a>
                     </div>
                 </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @{{ selectedFile }}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a v-for="file in files"
+                           href="#" role="button"
+                           v-on:click="selectedFile = file"
+                           class="dropdown-item" href="#">@{{ file }}</a>
+                    </div>
+                </li>
             </ul>
             <button class="btn btn-outline-info btn-sm mr-2"
                     v-on:click="promptToAddNewKey" v-if="languages.length"
