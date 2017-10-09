@@ -41,6 +41,7 @@
                     </div>
                 </li>
             </ul>
+        
             <button class="btn btn-outline-info btn-sm mr-2"
                     v-on:click="promptToAddNewKey" v-if="languages.length"
                     type="button">Add
@@ -85,6 +86,11 @@
                 <div v-if="selectedKey">
                     <p class="mb-4">
                         @{{ selectedKey }}
+                        <button class="btn btn-outline-warning btn-sm mr-2"
+                            style="float: right; margin-right: 0 !important;"
+                            type="button"
+                            v-on:click="toggleTextDirection">@{{ textDirection == 'ltr' ? 'RTL' : 'LTR'}}
+                        </button>
                     </p>
 
                 <textarea name="" rows="10" class="form-control mb-4"
