@@ -95,6 +95,7 @@
 
                 <textarea name="" rows="10" class="form-control mb-4"
                           v-model="translations[selectedLanguage][selectedKey]"
+                          v-bind:dir="textDirection"
                           placeholder="Translate..."></textarea>
 
                     <div class="d-flex justify-content-center">
