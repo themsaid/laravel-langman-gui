@@ -11,7 +11,8 @@ new Vue({
             languages: langman.languages,
             translations: langman.translations,
             selectedKey: null,
-            hasChanges: false
+            hasChanges: false,
+            textDirection: 'ltr',
         };
     },
 
@@ -190,6 +191,13 @@ new Vue({
                     this.translations[this.baseLanguage][key] = key;
                 }
             });
+        },
+
+        /**
+         * Toggle direction of text between LTR and RTL
+         */
+        toggleTextDirection() {
+            this.textDirection = this.textDirection === 'ltr' ? 'rtl' : 'ltr';
         }
     }
 });
