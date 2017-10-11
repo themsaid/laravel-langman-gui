@@ -193,7 +193,7 @@ new Vue({
         },
 
         highlight(value) {
-            return value.replace(/:{1}\w+/gi, function (match){return '<mark>' + match +'</mark>';});
+            return value.replace(/:{1}[\w-]+/gi, function (match){return '<mark>' + match +'</mark>';});
         }
     }
 });
