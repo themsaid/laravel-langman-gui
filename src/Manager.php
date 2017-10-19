@@ -254,4 +254,14 @@ class Manager
     {
         isset($this->translations[$language][$filename]) ? $this->translations[$language][$filename] += $translations : $this->translations[$language][$filename] = $translations;
     }
+
+    private function convertNullToEmptyString(array $lines)
+    {
+        foreach($lines as $key => $value)
+        {
+            $lines[$key] = is_null($value) ? '' : $value;
+        }
+
+        return $lines;
+    }
 }
