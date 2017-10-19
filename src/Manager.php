@@ -184,23 +184,36 @@ class Manager
 
         $pattern =
             // See https://regex101.com/r/jS5fX0/5
-            '[^\w]' . // Must not start with any alphanum or _
-            '(?<!->)' . // Must not start with ->
-            '(' . implode('|', $functions) . ')' .// Must start with one of the functions
-            "\(\s?" .// Match opening parentheses with optional space character
-            "[\'\"]" .// Match " or '
-            '(' .// Start a new group to match:
-            '.+' .// Must start with group
-            ')' .// Close group
-            "[\'\"]?" .// Closing quote
-            "[\s\),]"  // Close parentheses optional space character or new parameter
+            '[^\w]'. // Must not start with any alphanum or _
+            '(?<!->)'. // Must not start with ->
+            '('.implode('|', $functions).')'.// Must start with one of the functions
+            "\(".// Match opening parentheses
+            "[\'\"]".// Match " or '
+            '('.// Start a new group to match:
+            '.+'.// Must start with group
+            ')'.// Close group
+            "[\'\"]".// Closing quote
+            "[\),]"  // Close parentheses or new parameter
         ;
 
         $allMatches = [];
 
         foreach ($this->disk->allFiles($this->lookupPaths) as $file) {
             if (preg_match_all("/$pattern/siU", $file->getContents(), $matches)) {
-                $allMatches[$file->getRelativePathname()] = $matches[2];
+
+                foreach ($matches[2] as $key) {
+                    if (preg_match("/(^[a-zA-Z0-9_-]+([.][^\1)\ ]+)+$)/siU", $key, $groupMatches)) {
+                        
+                        list($group, $item) = explode('.', $groupMatches[0], 2);
+                        $allMatches['groups'][$group][] = $item;
+                        continue;
+
+                    } else {
+
+                        $allMatches['strings'][] = $key;
+
+                    }
+                }
             }
         }
 
