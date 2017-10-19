@@ -137,6 +137,8 @@ class Manager
 
             foreach($file as $name => $lines) {
 
+                $lines = $this->convertNullToEmptyString($lines);
+
                 if(is_array($lines)) ksort($lines);
 
                 if(strpos($name, '.json') !== false) {
