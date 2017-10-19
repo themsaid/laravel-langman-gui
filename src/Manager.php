@@ -116,8 +116,16 @@ class Manager
                 }
             }
         }
+    }
 
-        return array_values(array_unique($output));
+    private function filenameExistsInTranslations($language, $filename)
+    {
+        return isset($this->translations[$language][$filename]);
+    }
+
+    private function keyExistsInTranslations($language, $filename, $key)
+    {
+        return $this->filenameExistsInTranslations($language, $filename) && array_key_exists($key, $this->translations[$language][$filename]);
     }
 
     /**
