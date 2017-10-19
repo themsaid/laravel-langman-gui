@@ -89,12 +89,30 @@ class Manager
         return $this->translations;
     }
 
-        $keysFromFiles = array_collapse($this->getTranslationsFromFiles());
+    private function syncStringKeys($stringKeys)
+    {
+        foreach($stringKeys as $key)
+        {
+            foreach($this->translations as $language => $files) {
+                if(!$this->keyExistsInTranslations($language, "{$language}.json", $key)) {
+                    $this->translations[$language]["{$language}.json"][$key] = '';
+                }
+            }
+        }
+    }
 
         foreach (array_unique($keysFromFiles) as $fileName => $key) {
             foreach ($translations as $lang => $keys) {
                 if (! array_key_exists($key, $keys)) {
                     $output[] = $key;
+    private function syncGroupKeys($groupKeys)
+    {
+        foreach($groupKeys as $group => $keys) {
+            foreach($this->translations as $language => $files) {
+                foreach($keys as $key) {
+                    if(!$this->keyExistsInTranslations($language, "{$group}.php", $key)) {           
+                        $this->translations[$language]["{$group}.php"][$key] = '';
+                    }
                 }
             }
         }
