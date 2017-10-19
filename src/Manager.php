@@ -80,10 +80,14 @@ class Manager
     public function sync()
     {
         $this->backup();
+        $this->getTranslations();
+        $keysFromFiles = $this->getTranslationsFromFiles();
 
-        $output = [];
+        if(isset($keysFromFiles['strings'])) $this->syncStringKeys($keysFromFiles['strings']);
+        if(isset($keysFromFiles['groups'])) $this->syncGroupKeys($keysFromFiles['groups']);
 
-        $translations = $this->getTranslations();
+        return $this->translations;
+    }
 
         $keysFromFiles = array_collapse($this->getTranslationsFromFiles());
 
