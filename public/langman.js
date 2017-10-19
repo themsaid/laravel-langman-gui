@@ -43405,12 +43405,10 @@ new Vue({
         scanForKeys() {
             $.post('/langman/scan', {_token: langman.csrf})
                 .done(response => {
-                    if (response.length) {
-                        _.forEach(response, key => {
-                            this.addNewKey(key);
-                        });
+                    if (typeof response === 'object') {
 
-                        this.addValuesToBaseLanguage();
+                        console.log(response);
+                        Object.assign(this.translations, response);
 
                         return alert('Langman searched your files & found new keys to translate.');
                     }
@@ -43435,8 +43433,9 @@ new Vue({
 
     watch: {
         translations:  {
-            handler: function() {
+            handler: function(translations) {
                 this.hasChanges = true;
+                this.files = Object.keys(translations[this.selectedLanguage]);
             },
             deep: true
         },
@@ -43450,6 +43449,11 @@ new Vue({
             else {
                 window.onbeforeunload = null;
             }
+        },
+
+        selectedLanguage: function(language) {
+            this.files = Object.keys(this.translations[language]);
+            this.selectedFile = this.files[0];
         }
     }
 });
