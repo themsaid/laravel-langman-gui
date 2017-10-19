@@ -101,10 +101,6 @@ class Manager
         }
     }
 
-        foreach (array_unique($keysFromFiles) as $fileName => $key) {
-            foreach ($translations as $lang => $keys) {
-                if (! array_key_exists($key, $keys)) {
-                    $output[] = $key;
     private function syncGroupKeys($groupKeys)
     {
         foreach($groupKeys as $group => $keys) {
