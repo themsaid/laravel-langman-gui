@@ -43443,6 +43443,10 @@ new Vue({
                     this.translations[this.baseLanguage][key] = key;
                 }
             });
+        },
+
+        highlight(value) {
+            return value.replace(/:{1}[\w-]+/gi, function (match){return '<mark>' + match +'</mark>';});
         }
     }
 });
