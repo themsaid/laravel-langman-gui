@@ -43454,6 +43454,11 @@ new Vue({
         selectedLanguage: function(language) {
             this.files = Object.keys(this.translations[language]);
             this.selectedFile = this.files[0];
+        },
+
+        selectedKey: function(key)
+        {
+            this.selectedKey = String(key);
         }
     }
 });
