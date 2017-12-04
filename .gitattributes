@@ -1,5 +1,6 @@
 resources/js/* linguist-vendored
 resources/sass/* linguist-vendored
+resources/views/* linguist-vendored
 webpack.config.js linguist-vendored
 public/langman.js linguist-vendored
 public/langman.css linguist-vendored
