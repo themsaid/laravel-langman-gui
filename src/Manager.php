@@ -166,13 +166,32 @@ class Manager
 
         foreach ($this->disk->allFiles($this->lookupPaths) as $file) {
             if (preg_match_all("/$pattern/siU", $file->getContents(), $matches)) {
-                $allMatches[$file->getRelativePathname()] = $matches[2];
+
+                $allMatches[$file->getRelativePathname()] = $this->refineMatches($matches[2]);
             }
         }
 
         return $allMatches;
     }
 
+    /**
+     * Refine translations which are concatinated over multiple lines.
+     *
+     * @param array $matches
+     *
+     * @return mixed
+     */
+    private function refineMatches($matches)
+    {
+        foreach ($matches as $key => $value) {
+            if (strpos($value, "' .\n") !== false) {
+                $matches[$key] = preg_replace('!\s+\'!', ' ', str_replace("' .\n","",$value));
+            }
+        }
+
+        return $matches;
+    }
+    
     /**
      * Backup the existing translation files
      */
