@@ -80,11 +80,11 @@ new Vue({
          * Add a new translation key
          */
         addNewKey(key) {
-            if (this.translations[this.baseLanguage][key] !== undefined) {
-                return alert('This key already exists.');
-            }
-
             _.forEach(this.languages, lang => {
+                if (this.translations[lang][key] !== undefined) {
+                    return;
+                }
+
                 if (!this.translations[lang]) {
                     this.translations[lang] = {};
                 }
@@ -94,7 +94,6 @@ new Vue({
 
             this.addValuesToBaseLanguage();
         },
-
 
         /**
          * Remove the given key from all languages.
