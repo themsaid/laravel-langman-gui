@@ -15,7 +15,7 @@
     "ignore-loader": "^0.1.2",
     "jquery": "^3.1.0",
     "lodash": "^4.16.2",
-    "node-notifier": "^5.0.2",
+    "node-notifier": "^8.0.1",
     "node-sass": "^4.0.0",
     "on-build-webpack": "^0.1.0",
     "path": "^0.12.7",
